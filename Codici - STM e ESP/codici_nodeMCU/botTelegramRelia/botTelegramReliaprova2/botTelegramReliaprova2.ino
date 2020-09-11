@@ -5,7 +5,7 @@
 
 //-------------------------------------------------------------------------------------------------------------------------DEFINIZIONI e INIZIALIZZAZIONE INGRESSI E USCITE:
 #define wled D4
-#define led 2
+#define led D0
 #define interruptpin D5 //pin di interrupt
 #define wrn0 D1 //bit led n1
 #define wrn1 D6 //bit led n2
@@ -24,8 +24,8 @@ int ids[10];
 // ids [0] = 123456789  //roberto 
 // ids [1] = 987783423  //danjo
 
-String ssid  = "g6ext"; // REPLACE mySSID WITH YOUR WIFI SSID: TISCALI-Wifi
-String passw = "computerrob"; // REPLACE myPassword YOUR WIFI PASSWORD, IF ANY
+String ssid  = "cuginet"; // REPLACE mySSID WITH YOUR WIFI SSID: TISCALI-Wifi
+String passw = "cugicugimilitari"; // REPLACE myPassword YOUR WIFI PASSWORD, IF ANY
 String token = "904198135:AAE5jqQQeAYaUNbluG22HL_feCuPbv2RYvU"   ; // REPLACE myToken WITH YOUR TELEGRAM BOT TOKEN
 byte warning = 0x01;   // es byte = 00000001
 int navvertimento = 0; //quanti avvertimenti sono  arrivati
