@@ -5,7 +5,7 @@
 
 //-------------------------------------------------------------------------------------------------------------------------DEFINIZIONI e INIZIALIZZAZIONE INGRESSI E USCITE:
 #define wled D4
-#define led 2
+#define led D0
 #define interruptpin D5 //pin di interrupt
 #define wrn0 D1 //bit led n1
 #define wrn1 D6 //bit led n2
@@ -145,6 +145,7 @@ void setup() {
     ids[4] = -347402800; //gruppo bots
     ids[5] = 000000000 ; //zeri    
 
+    digitalWrite(wled, HIGH); // INIZIALIZZA IL LED WIFI A SPENTO HIGH=SPENTO
     Serial.println("Starting TelegramBot...");
 
     // connect the ESP8266 to the desired access point

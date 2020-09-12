@@ -24,8 +24,8 @@ int ids[10];
 // ids [0] = 123456789  //roberto 
 // ids [1] = 987783423  //danjo
 
-String ssid  = "cuginet"; // REPLACE mySSID WITH YOUR WIFI SSID: TISCALI-Wifi
-String passw = "cugicugimilitari"; // REPLACE myPassword YOUR WIFI PASSWORD, IF ANY
+String ssid  = "g6ext"; // REPLACE mySSID WITH YOUR WIFI SSID: TISCALI-Wifi
+String passw = "computerrob"; // REPLACE myPassword YOUR WIFI PASSWORD, IF ANY
 String token = "904198135:AAE5jqQQeAYaUNbluG22HL_feCuPbv2RYvU"   ; // REPLACE myToken WITH YOUR TELEGRAM BOT TOKEN
 byte warning = 0x01;   // es byte = 00000001
 int navvertimento = 0; //quanti avvertimenti sono  arrivati
@@ -128,7 +128,7 @@ ICACHE_RAM_ATTR void interruptfunction() {
 void setup() {
     // initialize the Serial
     Serial.begin(115200);
-    
+    Serial.println("Start setup");
     // set IO & interrupt
     pinMode(wled, OUTPUT);
     pinMode(led, OUTPUT);
@@ -137,14 +137,15 @@ void setup() {
     pinMode(wrn1, INPUT);
     pinMode(wrn2, INPUT);   
     pinMode(wrn3, INPUT);
-    
+/*
     ids[0] = 291655246 ; //robbe
     ids[1] = 196098030 ; //augu
     ids[2] = 134892235 ; //danjo
     ids[3] = -286862230; //le magiche avventure al diee
     ids[4] = -347402800; //gruppo bots
     ids[5] = 000000000 ; //zeri    
-
+*/
+    digitalWrite(wled, HIGH); //inizializza led wifi spento HIGH = SPENTO
     Serial.println("Starting TelegramBot...");
 
     // connect the ESP8266 to the desired access point
@@ -172,6 +173,7 @@ void setup() {
     // add a new empty button row
     myKbd.addRow();
     myKbd.addButton("STATUS SISTEMA", STATUS, CTBotKeyboardButtonQuery);
+    Serial.println("End setup");
 }
 
 
