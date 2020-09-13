@@ -10,8 +10,8 @@ GPIOC->ODR[0] ---> comanda l'interruttore generale HP DEVE ESSERE ALTO PER ESSER
 GPIOC->ODR[1:3] ---> codifica il LED i-esimo
 GPIOC->ODR[4:5] ---> codifica il tipo di messaggio da mandare
 	00 guasto pertinente
-	01 guasto non pertinente step 1
-	10 guasto non pertinente step 0
+	01 guasto non pertinente step 1 o 0
+	10 fine step (0 o 1)
 	11 tutti i led si sono rotti
 GPIOC->ODR[6] ---> segnale di interrupt per avvisare il modulo wifi
 
@@ -33,13 +33,13 @@ una soluzione ancora più  robusta sarebbe quella di azzerarlo nuovamente dopo c
 
 //Le prime 3 define sono solo di prova con breakpoint, in realtà sono N_CH=8, e Max soprasoglia e flutt 100
 
-#define N_CH 2
+#define N_CH 1
 /*numero di canali utilizzati --> SE VOGLIO CAMBIARE NUMERO DI LED DEVO MODIFICARE ADC_CHSELR*/
 
 #define MAX_SOPRASOGLIA 5 /*massimo numero di volte che il led deve andare
 CONSECUTIVAMENTE sotto la soglia per essere dichiarato guasto pertinente*/
 
-#define MAX_FLUTT 5 /*numero di volte che il led deve oscillare per
+#define MAX_FLUTT 2 /*numero di volte che il led deve oscillare per
 essere considerato guasto NON pertinente*/
 
 #define T_SAMPLE 1000 /*tempo tra la prima conversione e l'altra [microsecondi] 1000 di default ---> 1 millisecondo*/
@@ -49,7 +49,7 @@ essere considerato guasto NON pertinente*/
 
 #define SOGLIA_1 1000//step 1
 
-#define T_STEP0 20//in realtà è 14400000 per contare 4 ore per lo step 0 (corrente elevata)
+#define T_STEP0 3000//in realtà è 14400000 per contare 4 ore per lo step 0 (corrente elevata)
 
 #define T_STEP1 2000 //2 secondi (step 1, corrente nominale), sufficienti ad accorgersi di eventuali guasti
 
@@ -170,7 +170,7 @@ void TIM14_IRQHandler(void){
 						if(cnt_soprasoglia[j] > MAX_SOPRASOGLIA){
 							//guasto non pertinente
 							guasti[j] = 2;
-							sendAlarm(j, 2);
+							sendAlarm(j, 1);
 						}
 					}
 				}
@@ -179,6 +179,7 @@ void TIM14_IRQHandler(void){
 		else{
 			//mando l'avviso
 			//stacco l'interruttore generale
+			sendAlarm(-1, 2);
 			GPIOC->ODR &= !0x1;
 			//disabilito il timer
 			TIM14->CR1 &= !TIM_CR1_CEN;
@@ -187,7 +188,6 @@ void TIM14_IRQHandler(void){
 	}
 	else{
 		if(cnt < T_STEP1-1){//conto 2 secondi
-
 			cnt++;
 			for(j=0; j < N_CH; j++){
 				if(guasti[j] == 0){//se entra vuol dire che il LED j non è ancora dichiarato rotto, altrimenti non fare niente
@@ -220,6 +220,7 @@ void TIM14_IRQHandler(void){
 		else{
 			//mando l'avviso
 			//stacco l'interruttore generale
+			sendAlarm(-1, 2);
 			GPIOC->ODR &= !0x1;
 			//disabilito il timer
 			TIM14->CR1 &= !TIM_CR1_CEN;
@@ -256,13 +257,13 @@ Dopodichè viene riattivato il contatore del timer, l'interrupt enable e l'inter
 */
 void EXTI4_15_IRQHandler(void){
 	if(state == 0){
-		if(cnt >= T_STEP0){
+		if(cnt >= (T_STEP0-1)){
 			state = 1;
 			cnt=0;
 		}
 	}
 	else {
-		if(cnt >= T_STEP1){
+		if(cnt >= T_STEP1-1){
 			state = 0;
 			cnt=0;
 		}
@@ -305,7 +306,7 @@ void configuraADC1(void){
 	ADC1->CFGR2 &= ~ADC_CFGR2_CKMODE;//clock asincrono
 
 	//Abbiamo attivato solo 2 canali per prova
-	ADC1->CHSELR |= ADC_CHSELR_CHSEL0 | ADC_CHSELR_CHSEL1; //| ADC_CHSELR_CHSEL4 |
+	ADC1->CHSELR |= ADC_CHSELR_CHSEL0; //| ADC_CHSELR_CHSEL1; //| ADC_CHSELR_CHSEL4 |
 			//ADC_CHSELR_CHSEL5 | ADC_CHSELR_CHSEL6 | ADC_CHSELR_CHSEL7 | ADC_CHSELR_CHSEL8 |ADC_CHSELR_CHSEL9;
 
 	ADC1->SMPR &= !ADC_SMPR_SMP;//frequenza massima di sampling, ricontrollare tempo campionamento
