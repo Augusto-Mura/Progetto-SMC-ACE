@@ -6,7 +6,7 @@
 /*
 GPIOB->ODR[3:10] ---> GPIOB_ODR[i] comanda l'interruttore per deviare la corrente nel LED i
 
-GPIOC->ODR[0] ---> comanda l'interruttore generale HP DEVE ESSERE ALTO PER ESSERE CHIUSO L'INTERRUTTORE (NMOS)
+GPIOC->ODR[0] ---> comanda l'interruttore generale DEVE ESSERE ALTO PER ESSERE CHIUSO L'INTERRUTTORE (NMOS)
 GPIOC->ODR[1:3] ---> codifica il LED i-esimo
 GPIOC->ODR[4:5] ---> codifica il tipo di messaggio da mandare
 	00 guasto pertinente
@@ -33,7 +33,7 @@ una soluzione ancora più  robusta sarebbe quella di azzerarlo nuovamente dopo c
 
 //Le prime 3 define sono solo di prova con breakpoint, in realtà sono N_CH=8, e Max soprasoglia e flutt 100
 
-#define N_CH 1
+#define N_CH 2
 /*numero di canali utilizzati --> SE VOGLIO CAMBIARE NUMERO DI LED DEVO MODIFICARE ADC_CHSELR*/
 
 #define MAX_SOPRASOGLIA 5 /*massimo numero di volte che il led deve andare
@@ -141,7 +141,7 @@ void sendAlarm(int j, int mex_code){
 	//Disabilito contatore del timer e l'enable interrupt
 	TIM14->CR1 &= !TIM_CR1_CEN;
 	TIM14->DIER &= !TIM_DIER_UIE;
-
+	GPIOC->ODR &= !0x1;//disabilito interuttore generale scrivendo 0 nel primo bit(arriva al gate)
 	//manda messaggio(implemento semplicemente come un pin di output a 1 che sarà  un interrupt per il modulo wi-fi
 	//altri 3 pin di output li uso per capire quale led si è rotto
 	//e ultimi due pin li uso per capire se il guasto è pertinente o no, se si sono rotti tutti e a quale step appartiene (come nella legenda)
@@ -180,7 +180,7 @@ void TIM14_IRQHandler(void){
 			//mando l'avviso
 			//stacco l'interruttore generale
 			sendAlarm(-1, 2);
-			GPIOC->ODR &= !0x1;
+			//GPIOC->ODR &= !0x1; lo facciamo già in sendallarm
 			//disabilito il timer
 			TIM14->CR1 &= !TIM_CR1_CEN;
 			TIM14->DIER &= !TIM_DIER_UIE;
@@ -221,7 +221,7 @@ void TIM14_IRQHandler(void){
 			//mando l'avviso
 			//stacco l'interruttore generale
 			sendAlarm(-1, 2);
-			GPIOC->ODR &= !0x1;
+			//GPIOC->ODR &= !0x1; lo facciamo già in sendallarm
 			//disabilito il timer
 			TIM14->CR1 &= !TIM_CR1_CEN;
 			TIM14->DIER &= !TIM_DIER_UIE;
@@ -306,7 +306,7 @@ void configuraADC1(void){
 	ADC1->CFGR2 &= ~ADC_CFGR2_CKMODE;//clock asincrono
 
 	//Abbiamo attivato solo 2 canali per prova
-	ADC1->CHSELR |= ADC_CHSELR_CHSEL0; //| ADC_CHSELR_CHSEL1; //| ADC_CHSELR_CHSEL4 |
+	ADC1->CHSELR |= ADC_CHSELR_CHSEL0 | ADC_CHSELR_CHSEL1; //| ADC_CHSELR_CHSEL4 |
 			//ADC_CHSELR_CHSEL5 | ADC_CHSELR_CHSEL6 | ADC_CHSELR_CHSEL7 | ADC_CHSELR_CHSEL8 |ADC_CHSELR_CHSEL9;
 
 	ADC1->SMPR &= !ADC_SMPR_SMP;//frequenza massima di sampling, ricontrollare tempo campionamento
