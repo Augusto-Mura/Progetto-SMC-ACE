@@ -1,7 +1,3 @@
-/*******************************************************************
-    Control an LED strip using Inline Keyboard on Telegram
-   Code By Brian Lough
- **********************/
 #include <ESP8266WiFi.h> // for ESP8266 Board
 //#include <ESP8266WiFi.h>//Use for eso32 Board
 #include <WiFiClientSecure.h>
@@ -20,11 +16,24 @@
 // https://github.com/bblanchon/ArduinoJson
 
 //------- Replace the following! ------
-
 char ssid[] = "FASTWEBRU";         // your network SSID (name)
 char password[] = "fastwebruda"; // your network password
 #define TELEGRAM_BOT_TOKEN "904198135:AAE5jqQQeAYaUNbluG22HL_feCuPbv2RYvU"  // Your Telegram Bot Token 
 
+
+#define wled D4
+#define led D0
+
+#define interruptpin D5 //pin di interrupt
+#define wrn0 D1 //bit led n1
+#define wrn1 D6 //bit led n2
+#define wrn2 D7 //bit led n3
+#define wrn3 D3 //bit n1 di tipologia di guasto 
+#define wrn4 D8 //bit n2 di tipologia di guasto 
+
+byte warning = 0x01;   // es byte = 00000001
+int navvertimento = 0; //quanti avvertimenti sono  arrivati
+int cntEvent = 0;     
 
 
 int ids[10];
@@ -33,21 +42,77 @@ int ids[10];
 // ids [1] = 987783423  //danjo
 //------- ---------------------- ------
 
-
 // This is the Wifi client that supports HTTPS
 WiFiClientSecure client;
 UniversalTelegramBot bot(TELEGRAM_BOT_TOKEN, client);
-// Use 12, 12, 14, 27 instead of D0, D1, D2, D3 resp. for esp32
-#define LED_PIN1 D0 // Digital pins of Esp8266
-#define LED_PIN2 D1
-#define LED_PIN3 D2
-#define LED_PIN4 D3
 
 int delayBetweenChecks = 1000;
 unsigned long lastTimeChecked;   //last time messages' scan has been done
 
 unsigned long lightTimerExpires;
 boolean lightTimerActive = false;
+//-------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------FUNZIONI
+//-------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------------------------------INTERRUPT HANDLER:
+void interpretaEavverti(int id){                       //funzione che capisce che combinaziona è stata mandata e manda il messaggio a id
+    int guasto = (warning & 0x18)>>3; //shift codice guasto
+    int idLED = (warning & 0x07);
+    switch(guasto){
+      
+        case(0x0):
+        String txt = "GUASTO PERTINENTE nel led n° " + String(idLED+1);
+        myBot.sendMessage(id, txt);
+        break;
+        
+        case(0x1):
+        String txt = "GUASTO NON PERTINENTE nel led n° " + String(idLED+1);
+        myBot.sendMessage(id, txt);
+        break;
+        
+        case(0x2): //00000010
+        myBot.sendMessage(id, "FINE STEP (vai e riattacca tutto)");    //aggiungi cose da fare
+        break;
+        
+        case(0x3):
+        myBot.sendMessage(id, "TUTTI I LED SI SONO ROTTI");
+        break;
+        
+        default:
+        myBot.sendMessage(id, "ERRORE COMBINAZIONE");
+        break;
+    }
+}
+
+
+
+void readpin(){
+    bitWrite(warning, 0, digitalRead(wrn0));
+    bitWrite(warning, 1, digitalRead(wrn1));
+    bitWrite(warning, 2, digitalRead(wrn2));
+    bitWrite(warning, 3, digitalRead(wrn3));
+    bitWrite(warning, 4, digitalRead(wrn4));
+}
+
+
+
+
+ICACHE_RAM_ATTR void interruptfunction() {
+  myBot.wifiConnect(ssid, passw); //connettiti al wifi
+  String txt = "ATTENZIONE! avvertimento n°" + String(cntEvent+1);  
+  cntEvent++;
+  readpin();
+  for(int i = 0; i<3; i++){
+    myBot.sendMessage(ids[i], txt);
+    interpretaEavverti(ids[i]);
+  }
+  Serial.println(txt);
+  Serial.println("avvertimento n %d arrivato!");
+  //while(pollingPin){}
+}
+
+
 
 void setup() 
 {
@@ -56,15 +121,19 @@ void setup()
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
+
   
-  pinMode(D0, OUTPUT);
-  digitalWrite(D0, HIGH);
-  pinMode(D1, OUTPUT);
-  digitalWrite(D1, HIGH);
-  pinMode(D2, OUTPUT);
-  digitalWrite(D2, HIGH);
-  pinMode(D3, OUTPUT);
-  digitalWrite(D3, HIGH);
+  
+  // set IO & interrupt
+  pinMode(wled, OUTPUT);
+  pinMode(led, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(interruptpin), interruptfunction, RISING); //INTERRUPT PIN = D5 
+  pinMode(wrn0, INPUT);   
+  pinMode(wrn1, INPUT);
+  pinMode(wrn2, INPUT);   
+  pinMode(wrn3, INPUT);
+
+  
 
   // attempt to connect to Wifi network:
   Serial.print("Connecting Wifi: ");
