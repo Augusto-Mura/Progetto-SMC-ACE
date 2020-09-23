@@ -15,7 +15,7 @@
 #include <ArduinoJson.h>
 // Library used for parsing Json from the API responses
 // NOTE: There is a breaking change in the 6.x.x version,
-// install the 5.x.x version instead
+// install the 5.13.5 version instead
 // Search for "Arduino Json" in the Arduino Library manager
 // https://github.com/bblanchon/ArduinoJson
 
