@@ -56,32 +56,66 @@ boolean lightTimerActive = false;
 //-------------------------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------------------------------------------------INTERRUPT HANDLER:
-void interpretaEavverti(int id){                       //funzione che capisce che combinaziona è stata mandata e manda il messaggio a id
+void wifiConnection(){
+  // Set WiFi to station mode and disconnect from an AP if it was Previously connected
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(100);
+
+
+    // attempt to connect to Wifi network:
+  Serial.print("Connecting Wifi: ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  // Only required on 2.5 Beta
+  client.setInsecure();
+
+  
+  // longPoll keeps the request to Telegram open for the given amount of seconds if there are no messages
+  // This hugely improves response time of the bot, but is only really suitable for projects
+  // where the the initial interaction comes from Telegram as the requests will block the loop for
+  // the length of the long poll
+  bot.longPoll = 60;
+  
+  }
+
+  
+void interpretaEavverti(int id){                       //funzione che capisce che combinaziona è arrivata e manda il messaggio a id
     int guasto = (warning & 0x18)>>3; //shift codice guasto
     int idLED = (warning & 0x07);
-    switch(guasto){
-      
-        case(0x0):
+    switch(guasto){      
+        case(0):
         String txt = "GUASTO PERTINENTE nel led n° " + String(idLED+1);
-        myBot.sendMessage(id, txt);
-        break;
-        
-        case(0x1):
+        bot.sendMessage(String(id), txt);
+        break;        
+        case(1):
         String txt = "GUASTO NON PERTINENTE nel led n° " + String(idLED+1);
-        myBot.sendMessage(id, txt);
+        myBot.sendMessage(String(id), txt);
+        break;        
+        case(2): //00000010
+        bot.sendMessage(String(id), "FINE STEP (vai e riattacca tutto)");    //aggiungi cose da fare
+        break;        
+        case(3):
+        {
+        bot.sendMessage(String(id), "TUTTI I LED SI SONO ROTTI");
         break;
-        
-        case(0x2): //00000010
-        myBot.sendMessage(id, "FINE STEP (vai e riattacca tutto)");    //aggiungi cose da fare
-        break;
-        
-        case(0x3):
-        myBot.sendMessage(id, "TUTTI I LED SI SONO ROTTI");
-        break;
-        
+        }
+        /*
         default:
-        myBot.sendMessage(id, "ERRORE COMBINAZIONE");
+        bot.sendMessage(String(id), "ERRORE COMBINAZIONE");
         break;
+        */
     }
 }
 
@@ -99,14 +133,13 @@ void readpin(){
 
 
 ICACHE_RAM_ATTR void interruptfunction() {
-  myBot.wifiConnect(ssid, passw); //connettiti al wifi
-  String txt = "ATTENZIONE! avvertimento n°" + String(cntEvent+1);  
+  wifiConnection(); //connettiti al wifi
+  String txt = "ATTENZIONE!(interrupt) avvertimento n°" + String(cntEvent+1);  
   cntEvent++;
   readpin();
-  for(int i = 0; i<3; i++){
-    myBot.sendMessage(ids[i], txt);
-    interpretaEavverti(ids[i]);
-  }
+  bot.sendMessage(String(ids[0]), txt);
+  interpretaEavverti(ids[i]);
+
   Serial.println(txt);
   Serial.println("avvertimento n %d arrivato!");
   //while(pollingPin){}
@@ -117,23 +150,11 @@ ICACHE_RAM_ATTR void interruptfunction() {
 void setup() 
 {
   Serial.begin(115200);
+  /*
  // Set WiFi to station mode and disconnect from an AP if it was Previously connected
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
-
-  
-  
-  // set IO & interrupt
-  pinMode(wled, OUTPUT);
-  pinMode(led, OUTPUT);
-  attachInterrupt(digitalPinToInterrupt(interruptpin), interruptfunction, RISING); //INTERRUPT PIN = D5 
-  pinMode(wrn0, INPUT);   
-  pinMode(wrn1, INPUT);
-  pinMode(wrn2, INPUT);   
-  pinMode(wrn3, INPUT);
-
-  
 
   // attempt to connect to Wifi network:
   Serial.print("Connecting Wifi: ");
@@ -159,8 +180,18 @@ void setup()
   // where the the initial interaction comes from Telegram as the requests will block the loop for
   // the length of the long poll
   bot.longPoll = 60;
-
-
+*/
+  wifiConnection(); //esegue tutte le istruzioni che ho commentato sopra
+ 
+  
+  // set IO & interrupt
+  pinMode(wled, OUTPUT);
+  pinMode(led, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(interruptpin), interruptfunction, RISING); //INTERRUPT PIN = D5 
+  pinMode(wrn0, INPUT);   
+  pinMode(wrn1, INPUT);
+  pinMode(wrn2, INPUT);   
+  pinMode(wrn3, INPUT);
 
   ids[0] = 291655246 ; //robbe
   ids[1] = 196098030 ; //augu
@@ -168,11 +199,10 @@ void setup()
   ids[3] = -286862230; //le magiche avventure al diee
   ids[4] = -347402800; //gruppo bots
   ids[5] = 000000000 ; //zeri    
-  bot.sendMessage(String(ids[0]), "tutto ok con la connessione della NodeMCU");
-
-
+  bot.sendMessage(String(ids[0]), "tutto ok con la connessione della NodeMCU e con il bot Telegram");
 
 }
+
 
 void handleNewMessages(int numNewMessages)
 {for (int i = 0; i < numNewMessages; i++) 
