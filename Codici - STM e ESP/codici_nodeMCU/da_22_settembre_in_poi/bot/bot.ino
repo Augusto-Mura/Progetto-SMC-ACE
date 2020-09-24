@@ -27,7 +27,7 @@ char password[] = "fastwebruda"; // your network password
 #define wrn0 D1 //bit led n1
 #define wrn1 D6 //bit led n2
 #define wrn2 D7 //bit led n3
-#define wrn3 D3 //bit n1 di tipologia di guasto 
+#define wrn3 D2 //bit n1 di tipologia di guasto 
 #define wrn4 D8 //bit n2 di tipologia di guasto 
 
 byte warning = 0x01;   // es byte = 00000001
