@@ -155,6 +155,6 @@ void loop()
   if (polling) {
     readpin();
     interpretaEavverti(String(idallarm));
-    delay(5000); //metto 5 secondi per fare i test a mano, poi ri metteremo 1100 millisecondi
+    delay(1100); //metto 5 secondi per fare i test a mano, poi ri metteremo 1100 millisecondi
     }
 }
