@@ -17,8 +17,8 @@
 //--------------------------------------------------COSTANT&DEFINITION-----------------------------------------------------
 //-------------------------------------------------------------------------------------------------------------------------
 //------- Replace the following! ------
-char ssid[] = "FASTWEBRU";         // your network SSID (name)
-char password[] = "fastwebruda"; // your network password
+char ssid[] = "cuginet";         // your network SSID (name)
+char password[] = "cugicugimilitari"; // your network password
 #define TELEGRAM_BOT_TOKEN "1365422019:AAEAjwqsaY3zhMjLUULraW3KsWCXGu5SPwQ"  // Your Telegram Bot Token 
 
 #define wled D4
@@ -96,7 +96,7 @@ void interpretaEavverti(String id){//funzione che capisce che combinaziona è ar
         bot.sendMessage(String(id), txt);}
         break;        
         case(2): //00000010
-        bot.sendMessage(String(id), "FINE STEP (vai e riattacca tutto)");    //aggiungi cose da fare{}
+        bot.sendMessage(String(id), "FINE STEP " + String(idLED) + "(vai e riattacca tutto)");// usiamo idled per sapere in che step siamo, aggiungi cose da fare{}
         break;        
         case(3):
         bot.sendMessage(String(id), "TUTTI I LED SI SONO ROTTI");
@@ -155,6 +155,6 @@ void loop()
   if (polling) {
     readpin();
     interpretaEavverti(String(idallarm));
-    delay(1100); //metto 5 secondi per fare i test a mano, poi ri metteremo 1100 millisecondi
+    delay(1000); //metto 5 secondi per fare i test a mano, poi ri metteremo 1100 millisecondi
     }
 }
