@@ -79,7 +79,8 @@ void sendAlertTelegram(String id){//funzione che interpreta la combinazione e ma
         bot.sendMessage(String(id), txt);}
         break;        
         case(2):
-        bot.sendMessage(String(id), "FINE STEP " + String(idLED) + "\n1)Premi il punsalte \n2)Cambia la corrente su i LED \n3)Premi nuovamente il pulsante"); 
+        {String txt = "FINE STEP " + String(idLED) + "\n1)Premi il punsalte \n2)Cambia la corrente su i LED \n3)Premi nuovamente il pulsante";
+        bot.sendMessage(String(id), txt);}
         // (usiamo idLED per indicare in che STEP siamo)
         break;        
         case(3):
