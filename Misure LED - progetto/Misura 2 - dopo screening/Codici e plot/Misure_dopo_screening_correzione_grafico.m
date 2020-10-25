@@ -12172,7 +12172,8 @@ I33_b = [I33_b; (0.1 + (zeros(length(V) - length(I33_b), 1)))];
 I34_b = [I34_b; (0.1 + (zeros(length(V) - length(I34_b), 1)))];
 I35_b = [I35_b; (0.1 + (zeros(length(V) - length(I35_b), 1)))];
 
-
+figure(1)
+title('2 - Seconda caratterizzazione - misura dopo screening')
 
 plot(V,I01_b);
 hold on;
@@ -12244,6 +12245,123 @@ hold on;
 plot(V,I34_b);
 hold on;
 plot(V,I35_b);
+hold on;
+
+legend('led01','led02','led03','led04','led05','led06','led07','led08','led09','led10','led11','led12','led13','led14','led15','led16','led17','led19','led20','led21','led22','led23','led24','led25','led26','led27','led28','led29','led30','led31','led32','led33','led34','led35')
+%elimino il led 18 che è diffettoso
+
+
+
+V = (2:0.01:4.01)';
+
+I01_c = I01_b(floor(size(I01_b,1)/2):end);
+I02_c = I02_b(floor(size(I02_b,1)/2):end);
+I03_c = I03_b(floor(size(I03_b,1)/2):end);
+I04_c = I04_b(floor(size(I04_b,1)/2):end);
+I05_c = I05_b(floor(size(I05_b,1)/2):end);
+I06_c = I06_b(floor(size(I06_b,1)/2):end);
+I07_c = I07_b(floor(size(I07_b,1)/2):end);
+I08_c = I08_b(floor(size(I08_b,1)/2):end);
+I09_c = I09_b(floor(size(I09_b,1)/2):end);
+I10_c = I10_b(floor(size(I10_b,1)/2):end);
+I11_c = I11_b(floor(size(I11_b,1)/2):end);
+I12_c = I12_b(floor(size(I12_b,1)/2):end);
+I13_c = I13_b(floor(size(I13_b,1)/2):end);
+I14_c = I14_b(floor(size(I14_b,1)/2):end);
+I15_c = I15_b(floor(size(I15_b,1)/2):end);
+I16_c = I16_b(floor(size(I16_b,1)/2):end);
+I17_c = I17_b(floor(size(I17_b,1)/2):end);
+%I18_c = I18_b(floor(size(I18_b,1)/2):end);
+I19_c = I19_b(floor(size(I19_b,1)/2):end);
+I20_c = I20_b(floor(size(I20_b,1)/2):end);
+I21_c = I21_b(floor(size(I21_b,1)/2):end);
+I22_c = I22_b(floor(size(I22_b,1)/2):end);
+I23_c = I23_b(floor(size(I23_b,1)/2):end);
+I24_c = I24_b(floor(size(I24_b,1)/2):end);
+I25_c = I25_b(floor(size(I25_b,1)/2):end);
+I26_c = I26_b(floor(size(I26_b,1)/2):end);
+I27_c = I27_b(floor(size(I27_b,1)/2):end);
+I28_c = I28_b(floor(size(I28_b,1)/2):end);
+I29_c = I29_b(floor(size(I29_b,1)/2):end);
+I30_c = I30_b(floor(size(I30_b,1)/2):end);
+I31_c = I31_b(floor(size(I31_b,1)/2):end);
+I32_c = I32_b(floor(size(I32_b,1)/2):end);
+I33_c = I33_b(floor(size(I33_b,1)/2):end);
+I34_c = I34_b(floor(size(I34_b,1)/2):end);
+I35_c = I35_b(floor(size(I35_b,1)/2):end);
+
+figure(2)
+
+plot(V,I01_c);
+hold on;
+plot(V,I02_c);
+hold on;
+plot(V,I03_c);
+hold on;
+plot(V,I04_c);
+hold on;
+plot(V,I05_c);
+hold on;
+plot(V,I06_c);
+hold on;
+plot(V,I07_c);
+hold on;
+plot(V,I08_c);
+hold on;
+plot(V,I09_c);
+hold on;
+plot(V,I10_c);
+hold on;
+plot(V,I11_c);
+hold on;
+plot(V,I12_c);
+hold on;
+plot(V,I13_c);
+hold on;
+plot(V,I14_c);
+hold on;
+plot(V,I15_c);
+hold on;
+plot(V,I16_c);
+hold on;
+plot(V,I17_c);
+hold on;
+%plot(V,I18_c);
+%hold on;
+%elimino il led 18 che è diffettoso
+plot(V,I19_c);
+hold on;
+plot(V,I20_c);
+hold on;
+plot(V,I21_c);
+hold on;
+plot(V,I22_c);
+hold on;
+plot(V,I23_c);
+hold on;
+plot(V,I24_c);
+hold on;
+plot(V,I25_c);
+hold on;
+plot(V,I26_c);
+hold on;
+plot(V,I27_c);
+hold on;
+plot(V,I28_c);
+hold on;
+plot(V,I29_c);
+hold on;
+plot(V,I30_c);
+hold on;
+plot(V,I31_c);
+hold on;
+plot(V,I32_c);
+hold on;
+plot(V,I33_c);
+hold on;
+plot(V,I34_c);
+hold on;
+plot(V,I35_c);
 hold on;
 
 legend('led01','led02','led03','led04','led05','led06','led07','led08','led09','led10','led11','led12','led13','led14','led15','led16','led17','led19','led20','led21','led22','led23','led24','led25','led26','led27','led28','led29','led30','led31','led32','led33','led34','led35')
