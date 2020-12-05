@@ -2,7 +2,12 @@
 Tempi al guasto delle diverse prove. Nell'ordine:
   tp1 -> @ 60 mA;
   tp2 -> @ 75 mA;
-  tp3 -> @ 90 mA
+  tp3 -> @ 90 mA.
+I tempi sono riportati in termini di giri, cioè multipli di (T_step0 +
+  + T-step1), cioè 4 ore e 10 secondi (che consideriamo 4 ore e basta,
+  poiché lo step  è svolto a corrente nominale, e quindi influisce
+  in maniera risibile al tempo al guasto, rispetto allo step 0, svolto
+  a corrente off-nominal elevata).
 */
 
 tp1 = [52, 55, 55, 55, 55, 55, 86, 86];
