@@ -1,0 +1,10 @@
+/*
+Tempi al guasto delle diverse prove. Nell'ordine:
+  tp1 -> @ 60 mA;
+  tp2 -> @ 75 mA;
+  tp3 -> @ 90 mA
+*/
+
+tp1 = [52, 55, 55, 55, 55, 55, 86, 86];
+tp2 = [1, 36, 41, 42, 48, 50, 50, 50];
+tp3 = [10, 12, 22, 22, 22, 24, 24, 45];
