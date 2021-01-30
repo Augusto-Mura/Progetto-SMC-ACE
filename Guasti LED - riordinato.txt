@@ -1,0 +1,42 @@
+RISULTATI PROVE
+
+PROVA 1 - @ 60 mA
+
+1° rotto: LED 1 - 20° per screening - giro 52 - guasto pertinente;
+2° rotto: LED 2 -  1° per screening - giro 55 - guasto non pertinente - flickera, vedi appunti;
+3° rotto: LED 3 - 02° per screening - giro 55 - guasto non pertinente - flicker;
+4° rotto: LED 4 - 07° per screening - giro 55 - guasto non pertinente - flicker;
+5° rotto: LED 5 - 06° per screening - giro 55 - guasto non pertinente - flicker;
+6° rotto: LED 6 - 28° per screening - giro 55 - guasto non pertinente - flicker;
+7° rotto: LED 7 - 13° per screening - giro 86 - guasto non pertinente - flicker;
+8° rotto: LED 8 - 10° per screening - giro 86 - guasto non pertinente - gli ho dato io troppa corrente.
+
+—- FINE PROVA 60 mA —-
+
+
+PROVA 2 - @ 75 mA
+
+1° rotto: LED 4 - 19° per screening - giro  1 - guasto pertinente     - non ha flickerato;
+2° rotto: LED 3 - 23° per screening - giro 36 - guasto non pertinente - Finito step 1 del giro 35, i led stavano flickerano. Lui era meno luminoso rispetto aglia altri da almeno due giri. L'ho bypassato, il flickerio ha smesso. Considerato morto al giro 36;
+3° rotto: LED 7 - 21° per screening - giro 41 - guasto non pertinente - flicker durante step 1. Nota: in caso di guasti non pertinenti dovuti a flicker, controlla manualmente tutti i LED, a corrente alta. Se uno flickera, flickerano tutti (per il fatto che sono in serie), e la nucleo accusa il primo che sgama, che non necessariamente è il vero colpevole. In questo caso la nucleo ha accusato il 5, ma era il 7. EVENTUALMENTE RICONTROLLARE QUELLI MORTI TUTTI INSIEME NELLA PROVA A 60mA, per lo stesso motivo. LED 7 morto a inizio giro 41;
+4° rotto: LED 5 - 08° per screening - giro 42 - guasto non pertinente - no flicker, ma sceso sotto soglia durante step 0. LED 5 morto a inizio giro 42;
+5° rotto: LED 2 - 30° per screening - giro 48 - guasto non pertinente - Accusato il 6, in seguito a un'ispezione manuale, salta fuori che il responsabile (quello che effettivamente causa il flicker) era il 2. Iniziato a flickerare due minuti dopo l'inizio dello step 0. LED 2 morto a inizio giro 48;
+6° rotto: LED 8 - 11° per screening - giro 50 - guasto non pertinente - flicker
+7° rotto: LED 6 - 24° per screening - giro 50 - guasto non pertinente - flicker + bassa luminosità
+8° rotto: LED 1 - 05° per screening - giro 50 - guasto non pertinente - flicker - rotti a distanza di due minuti circa l'uno dall'altro, a inizio step 0
+
+—- FINE PROVA 75 mA —-
+
+
+PROVA 3 - @ 90 mA
+
+1° rotto: LED 5 - 16° per screening - giro 10 - guasto non pertinente - molto poco luminoso, ma nessun flicker - fine giro 10;
+2° rotto: LED 6 - 22° per screening - giro 12 - guasto non pertinente - molto meno luminoso, ma no flicker - giro 12;
+3° rotto: LED 2 - 12° per screening - giro 22 - guasto non pertinente - molto poco luminoso + flicker - (dopo circa 45 minuti da inizio step 0) giro 22;
+4° rotto: LED 8 - 27° per screening - giro 22 - guasto non pertinente - flicker - pochi minuti dopo il precedente - giro 22;
+5° rotto: LED 3 - 14° per screening - giro 22 - guasto non pertinente - flicker - 15 minuti dopo il precedente - giro 22;
+6° rotto: LED 4 - 15° per screening - giro 24 - guasto non pertinente - flicker - circa 45 minuti dopo inizio prova;
+7° rotto: LED 1 -  4° per screening - giro 24 - guasto non pertinente - flicker - subito dopo il precedente;
+8° rotto: LED 7 - 26° per screening - giro 45 - guasto non pertinente - gli ho dato io troppa corrente.
+
+—- FINE PROVA 90 mA —-
